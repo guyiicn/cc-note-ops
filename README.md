@@ -1,8 +1,8 @@
-# CC Note Ops
+# CC Note Ops (OMP Fork)
 
-把 Obsidian 当前笔记变成 Claude Code 可直接操作的内容工作台。
+把 Obsidian 当前笔记变成 OMP (oh-my-pi) 可直接操作的内容工作台。
 
-CC Note Ops 不是一个只好看的仪表盘。它会识别你当前打开的 Markdown 笔记，展示源笔记信息，提供一键内容操作，并把结果写回 Obsidian vault。你也可以把源笔记路径或改写提示词复制给 Obsidian 底部的 Claude Code 终端，继续人工接管。
+CC Note Ops 不是一个只好看的仪表盘。它会识别你当前打开的 Markdown 笔记，展示源笔记信息，提供一键内容操作，并把结果写回 Obsidian vault。你也可以把源笔记路径或改写提示词复制给 Obsidian 底部的 OMP 终端，继续人工接管。
 
 我会在 X 持续分享 CC Note Ops、Claude Code、Obsidian 内容工作流和 AI 创作自动化的实战更新：[@buhuaguo1](https://x.com/buhuaguo1)。
 
@@ -15,14 +15,14 @@ CC Note Ops 不是一个只好看的仪表盘。它会识别你当前打开的 M
 - 一键修改：润色原文、补标签和双链，修改前自动备份。
 - 文风模板：表达型按钮会读取当前选择的模板，支持沉淀自己的账号文风。
 - RSS 日报：打开工作台时按内置源池生成中文 Markdown AI 早报，展示重点、快讯和 X 创作候选。
-- Claude Code 集成：通过本机 `claude -p` 后台执行任务。
-- Terminal 配合：保留 Obsidian Terminal 插件里的连续 Claude Code 会话。
+- OMP 集成：通过本机 `omp -p` 后台执行任务。
+- Terminal 配合：保留 Obsidian Terminal 插件里的连续 OMP 会话。
 - 本土化内容流：默认面向公众号、小红书、朋友圈、即刻等中文内容场景。
 
 ## 适合谁
 
 - 用 Obsidian 管理素材、笔记和选题的创作者。
-- 已经安装 Claude Code，希望让 AI 直接处理当前笔记的人。
+- 已经安装 OMP，希望让 AI 直接处理当前笔记的人。
 - 想把一篇笔记快速变成公众号文章、小红书内容、选题池或知识库路标的人。
 
 ## 预览
@@ -51,12 +51,12 @@ CC Note Ops 不是一个只好看的仪表盘。它会识别你当前打开的 M
 
 1. Obsidian
    - 下载地址：https://obsidian.md/download
-2. Claude Code CLI
-   - 官方文档：https://docs.anthropic.com/en/docs/claude-code
+2. OMP CLI (oh-my-pi)
+   - 官方文档：https://github.com/can1357/oh-my-pi
    - 安装后请确认终端里可以运行：
 
 ```bash
-claude --help
+omp --version
 ```
 
 3. Obsidian Terminal 插件
@@ -275,10 +275,10 @@ NO_PROXY=localhost,127.0.0.1
 
 ## 和 Terminal 插件的关系
 
-按钮任务会在后台独立调用 Claude Code：
+按钮任务会在后台独立调用 OMP：
 
 ```bash
-claude -p "..."
+omp -p "..."
 ```
 
 所以底部 Terminal 不会跟着滚动，也不会显示按钮任务过程。
@@ -294,16 +294,16 @@ claude -p "..."
 Terminal 插件更适合连续对话。建议在 Terminal 里进入 vault 根目录，然后运行：
 
 ```bash
-claude
+omp
 ```
 
-如果你想让 Terminal 里的 Claude Code 手动处理某篇笔记，可以在操作台点击：
+如果你想让 Terminal 里的 OMP 手动处理某篇笔记，可以在操作台点击：
 
 - 复制相对路径
 - 复制完整路径
 - 复制改写提示词
 
-再粘贴到 Terminal 里的 Claude Code 会话。
+再粘贴到 Terminal 里的 OMP 会话。
 
 ## 自定义按钮
 
@@ -353,7 +353,7 @@ bash scripts/uninstall.sh "/path/to/your/ObsidianVault" --remove-content
 
 ## 安全说明
 
-这个项目会在你的本机执行 shell 脚本，并调用本机 Claude Code CLI。启用前请阅读：
+这个项目会在你的本机执行 shell 脚本，并调用本机 OMP CLI。启用前请阅读：
 
 - `plugin/cc-command-center/main.js`
 - `plugin/cc-command-center/data.json`

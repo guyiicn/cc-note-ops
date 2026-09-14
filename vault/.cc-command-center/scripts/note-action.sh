@@ -29,7 +29,7 @@ OUT_DIR="$VAULT_ROOT/控制中心/运行结果/当前笔记"
 BACKUP_DIR="$VAULT_ROOT/控制中心/备份"
 mkdir -p "$OUT_DIR" "$BACKUP_DIR"
 
-CLAUDE_BIN=""
+OMP_BIN=""
 load_proxy_env() {
   if [ ! -f "$PROXY_FILE" ]; then
     return
@@ -131,50 +131,55 @@ $(read_action_template)
 EOF
 }
 
-resolve_claude() {
-  if [ -n "$CLAUDE_BIN" ]; then
+resolve_omp() {
+  if [ -n "$OMP_BIN" ]; then
     return 0
   fi
 
-  if command -v claude >/dev/null 2>&1; then
-    CLAUDE_BIN="$(command -v claude)"
+  if command -v omp >/dev/null 2>&1; then
+    OMP_BIN="$(command -v omp)"
     return 0
   fi
 
-  if [ -x "$HOME/.local/bin/claude" ]; then
-    CLAUDE_BIN="$HOME/.local/bin/claude"
+  if [ -x "$HOME/.local/bin/omp" ]; then
+    OMP_BIN="$HOME/.local/bin/omp"
     return 0
   fi
 
-  if [ -x "/opt/homebrew/bin/claude" ]; then
-    CLAUDE_BIN="/opt/homebrew/bin/claude"
+  if [ -x "/opt/homebrew/bin/omp" ]; then
+    OMP_BIN="/opt/homebrew/bin/omp"
     return 0
   fi
 
-  if [ -x "/usr/local/bin/claude" ]; then
-    CLAUDE_BIN="/usr/local/bin/claude"
+  if [ -x "/usr/local/bin/omp" ]; then
+    OMP_BIN="/usr/local/bin/omp"
     return 0
   fi
 
-  CLAUDE_BIN="$(/bin/zsh -lc 'command -v claude' 2>/dev/null || true)"
-  if [ -n "$CLAUDE_BIN" ] && [ -x "$CLAUDE_BIN" ]; then
+  if [ -x "$HOME/.bun/bin/omp" ]; then
+    OMP_BIN="$HOME/.bun/bin/omp"
+    return 0
+  fi
+
+  OMP_BIN="$(/bin/zsh -lc 'command -v omp' 2>/dev/null || true)"
+  if [ -n "$OMP_BIN" ] && [ -x "$OMP_BIN" ]; then
     return 0
   fi
 
   return 1
 }
 
-write_missing_claude() {
+write_missing_omp() {
   local out="$1"
   cat > "$out" <<EOF
 # 命令未执行
 
-Claude Code CLI 未找到。
+OMP (oh-my-pi) CLI 未找到。
 
 请先在 Obsidian 的 Terminal 插件里确认能运行：
 
 \`\`\`bash
-claude --help
+omp --version
 \`\`\`
 
 当前笔记：
@@ -190,13 +195,13 @@ run_output_action() {
   local prompt="$2"
   load_proxy_env
 
-  if ! resolve_claude; then
-    write_missing_claude "$out"
+  if ! resolve_omp; then
+    write_missing_omp "$out"
     echo "OUTPUT:${out#$VAULT_ROOT/}"
     return
   fi
 
-  (cd "$VAULT_ROOT" && "$CLAUDE_BIN" -p "$prompt" < /dev/null) > "$out"
+  (cd "$VAULT_ROOT" && "$OMP_BIN" -p "$prompt" < /dev/null) > "$out"
   echo "OUTPUT:${out#$VAULT_ROOT/}"
 }
 
@@ -206,11 +211,11 @@ run_modify_action() {
   cp "$NOTE_ABS" "$backup"
   load_proxy_env
 
-  if ! resolve_claude; then
+  if ! resolve_omp; then
     cat >> "$NOTE_ABS" <<EOF
 
 <!--
-CC Command Center: Claude Code CLI 未找到，本次未修改。
+CC Command Center: OMP CLI 未找到，本次未修改。
 备份已保存：${backup#$VAULT_ROOT/}
 -->
 EOF
@@ -218,7 +223,7 @@ EOF
     return
   fi
 
-  (cd "$VAULT_ROOT" && "$CLAUDE_BIN" -p "$prompt" < /dev/null)
+  (cd "$VAULT_ROOT" && "$OMP_BIN" -p "$prompt" < /dev/null)
   echo "OUTPUT:$NOTE_REL"
 }
 
